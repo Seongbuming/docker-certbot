@@ -13,9 +13,12 @@ done
 docker build -t certbot .
 
 docker run -it --rm \
-    -p 80:80 \
     -v "${PWD}/letsencrypt:/etc/letsencrypt" \
     -v "${PWD}/lib:/var/lib/letsencrypt" \
-    certbot certonly --standalone $DOMAINS
+    certbot certonly \
+    --dns-cloudflare \
+    --dns-cloudflare-credentials /secrets/cloudflare.ini \
+    --dns-cloudflare-propagation-seconds 30 \
+    $DOMAINS
 
 docker compose up -d
