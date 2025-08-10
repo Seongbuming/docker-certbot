@@ -9,11 +9,16 @@ services:
     volumes:
       - ./letsencrypt:/etc/letsencrypt
       - ./lib:/var/lib/letsencrypt
+    #entrypoint: >
+    #  sh -c 'trap exit TERM; while :; do
+    #           certbot renew \
+    #             --dns-cloudflare \
+    #             --dns-cloudflare-credentials /secrets/cloudflare.ini \
+    #             --dns-cloudflare-propagation-seconds 30;
+    #           sleep 7d & wait $${!};
+    #         done;'
     entrypoint: >
       sh -c 'trap exit TERM; while :; do
-               certbot renew \
-                 --dns-cloudflare \
-                 --dns-cloudflare-credentials /secrets/cloudflare.ini \
-                 --dns-cloudflare-propagation-seconds 30;
-               sleep 7d & wait $${!};
+               certbot renew;
+               sleep 12h & wait $${!};
              done;'
